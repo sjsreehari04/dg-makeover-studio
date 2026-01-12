@@ -11,6 +11,10 @@ env/
 db.sqlite3
 *.log
 media/
+consultation_media/
+
+# Database backups
+*.sql
 
 # OS
 .DS_Store
