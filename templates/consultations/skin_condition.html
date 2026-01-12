@@ -1,0 +1,219 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h2 class="mb-1">
+                        <i class="bi bi-heart text-success me-3"></i>
+                        Skin Condition Assessment
+                    </h2>
+                    <p class="text-muted mb-0">{{ consultation.customer.name }}</p>
+                </div>
+                <div>
+                    <a href="{% url 'consultation_detail' consultation.id %}" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left me-2"></i>Back to Consultation
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Skin Assessment Form -->
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-success text-white py-3">
+                    <h5 class="mb-0">
+                        <i class="bi bi-clipboard-check me-2"></i>
+                        Skin Analysis Details
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <!-- Skin Type & Sun Exposure -->
+                        <div class="mb-4">
+                            <h6 class="fw-bold text-success mb-3">
+                                <i class="bi bi-sun me-2"></i>Basic Skin Profile
+                            </h6>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="skin_type" class="form-label fw-semibold">Skin Type</label>
+                                    <select name="skin_type" id="skin_type" class="form-select">
+                                        <option value="">-- Select Skin Type --</option>
+                                        <option value="NORMAL" {% if skin.skin_type == 'NORMAL' %}selected{% endif %}>Normal</option>
+                                        <option value="DRY" {% if skin.skin_type == 'DRY' %}selected{% endif %}>Dry</option>
+                                        <option value="OILY" {% if skin.skin_type == 'OILY' %}selected{% endif %}>Oily</option>
+                                        <option value="COMBINATION" {% if skin.skin_type == 'COMBINATION' %}selected{% endif %}>Combination</option>
+                                        <option value="SENSITIVE" {% if skin.skin_type == 'SENSITIVE' %}selected{% endif %}>Sensitive</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="sun_exposure" class="form-label fw-semibold">Daily Sun Exposure</label>
+                                    <select name="sun_exposure" id="sun_exposure" class="form-select">
+                                        <option value="">-- Select Exposure --</option>
+                                        <option value="NEVER" {% if skin.sun_exposure == 'NEVER' %}selected{% endif %}>Never</option>
+                                        <option value="LIGHT" {% if skin.sun_exposure == 'LIGHT' %}selected{% endif %}>Light (1–2 hrs)</option>
+                                        <option value="MODERATE" {% if skin.sun_exposure == 'MODERATE' %}selected{% endif %}>Moderate (2–3 hrs)</option>
+                                        <option value="EXCESSIVE" {% if skin.sun_exposure == 'EXCESSIVE' %}selected{% endif %}>Excessive (3–5 hrs)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Skin Concerns -->
+                        <div class="mb-4">
+                            <h6 class="fw-bold text-warning mb-3">
+                                <i class="bi bi-exclamation-triangle me-2"></i>Skin Concerns
+                            </h6>
+                            <div class="row g-2">
+                                <div class="col-12">
+                                    <div class="border rounded p-3 bg-light">
+                                        <div class="row g-3">
+                                            <div class="col-md-4">
+                                                <div class="form-check">
+                                                    <input type="checkbox" name="acne" id="acne" class="form-check-input"
+                                                           {% if skin.acne %}checked{% endif %}>
+                                                    <label class="form-check-label" for="acne">Acne</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-check">
+                                                    <input type="checkbox" name="dullness" id="dullness" class="form-check-input"
+                                                           {% if skin.dullness %}checked{% endif %}>
+                                                    <label class="form-check-label" for="dullness">Dullness</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-check">
+                                                    <input type="checkbox" name="pigmentation" id="pigmentation" class="form-check-input"
+                                                           {% if skin.pigmentation %}checked{% endif %}>
+                                                    <label class="form-check-label" for="pigmentation">Pigmentation</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-check">
+                                                    <input type="checkbox" name="wrinkles" id="wrinkles" class="form-check-input"
+                                                           {% if skin.wrinkles %}checked{% endif %}>
+                                                    <label class="form-check-label" for="wrinkles">Wrinkles</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-check">
+                                                    <input type="checkbox" name="dryness" id="dryness" class="form-check-input"
+                                                           {% if skin.dryness %}checked{% endif %}>
+                                                    <label class="form-check-label" for="dryness">Dryness</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-check">
+                                                    <input type="checkbox" name="comedones" id="comedones" class="form-check-input"
+                                                           {% if skin.comedones %}checked{% endif %}>
+                                                    <label class="form-check-label" for="comedones">Comedones</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Current Products -->
+                        <div class="mb-4">
+                            <h6 class="fw-bold text-info mb-3">
+                                <i class="bi bi-basket me-2"></i>Current Skincare Routine
+                            </h6>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="cleanser" class="form-label fw-semibold">Cleanser</label>
+                                    <input type="text" name="cleanser" id="cleanser" class="form-control"
+                                           placeholder="Cleanser brand/type" value="{{ skin.cleanser }}">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="toner" class="form-label fw-semibold">Toner</label>
+                                    <input type="text" name="toner" id="toner" class="form-control"
+                                           placeholder="Toner brand/type" value="{{ skin.toner }}">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="moisturiser" class="form-label fw-semibold">Moisturiser</label>
+                                    <input type="text" name="moisturiser" id="moisturiser" class="form-control"
+                                           placeholder="Moisturiser brand/type" value="{{ skin.moisturiser }}">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="sunscreen" class="form-label fw-semibold">Sunscreen</label>
+                                    <input type="text" name="sunscreen" id="sunscreen" class="form-control"
+                                           placeholder="Sunscreen brand/SPF" value="{{ skin.sunscreen }}">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="serum" class="form-label fw-semibold">Serum</label>
+                                    <input type="text" name="serum" id="serum" class="form-control"
+                                           placeholder="Serum brand/type" value="{{ skin.serum }}">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="other" class="form-label fw-semibold">Other Products</label>
+                                    <textarea name="other" id="other" class="form-control" rows="2"
+                                              placeholder="Masks, treatments, etc.">{{ skin.other }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="d-flex justify-content-between pt-3 border-top">
+                            <a href="{% url 'consultation_detail' consultation.id %}" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left me-2"></i>Back
+                            </a>
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-check-circle me-2"></i>Save Skin Assessment
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border-radius: 15px;
+        transition: all 0.3s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1) !important;
+    }
+
+    .form-check-input:checked {
+        background-color: #198754;
+        border-color: #198754;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: #198754;
+        box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.25);
+    }
+
+    .btn-success {
+        border-radius: 10px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-success:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(25, 135, 84, 0.3);
+    }
+
+    .btn-outline-secondary {
+        border-radius: 10px;
+        font-weight: 600;
+    }
+</style>
+
+{% endblock %}

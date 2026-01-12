@@ -1,0 +1,190 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h2 class="mb-1">
+                        <i class="bi bi-scissors text-primary me-3"></i>
+                        Hair Condition Assessment
+                    </h2>
+                    <p class="text-muted mb-0">{{ consultation.customer.name }}</p>
+                </div>
+                <div>
+                    <a href="{% url 'consultation_detail' consultation.id %}" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left me-2"></i>Back to Consultation
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hair Assessment Form -->
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-primary text-white py-3">
+                    <h5 class="mb-0">
+                        <i class="bi bi-clipboard-check me-2"></i>
+                        Hair Analysis Details
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <!-- Treatment History -->
+                        <div class="mb-4">
+                            <h6 class="fw-bold text-primary mb-3">
+                                <i class="bi bi-clock-history me-2"></i>Treatment History
+                            </h6>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="last_treatment" class="form-label fw-semibold">Last Treatment</label>
+                                    <input type="text" name="last_treatment" id="last_treatment" class="form-control"
+                                           value="{{ hair.last_treatment }}" placeholder="e.g., Coloring, Perm">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="henna_or_black" class="form-label fw-semibold">Henna / Black</label>
+                                    <select name="henna_or_black" id="henna_or_black" class="form-select">
+                                        <option value="">-- Select --</option>
+                                        <option value="HENNA" {% if hair.henna_or_black == 'HENNA' %}selected{% endif %}>Henna</option>
+                                        <option value="BLACK" {% if hair.henna_or_black == 'BLACK' %}selected{% endif %}>Black</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Home Care Routine -->
+                        <div class="mb-4">
+                            <h6 class="fw-bold text-success mb-3">
+                                <i class="bi bi-house-heart me-2"></i>Home Care Routine
+                            </h6>
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <div class="form-check mb-2">
+                                        <input type="checkbox" name="home_remedies" id="home_remedies"
+                                               class="form-check-input"
+                                               {% if hair.home_remedies %}checked{% endif %}>
+                                        <label class="form-check-label fw-semibold" for="home_remedies">Uses Home Remedies</label>
+                                    </div>
+                                    <textarea name="home_remedy_details" id="home_remedy_details"
+                                              class="form-control" rows="2"
+                                              placeholder="Describe home remedies used">{{ hair.home_remedy_details }}</textarea>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-check mb-2">
+                                        <input type="checkbox" name="hair_oil" id="hair_oil"
+                                               class="form-check-input"
+                                               {% if hair.hair_oil %}checked{% endif %}>
+                                        <label class="form-check-label fw-semibold" for="hair_oil">Uses Hair Oil</label>
+                                    </div>
+                                    <textarea name="hair_oil_details" id="hair_oil_details"
+                                              class="form-control" rows="2"
+                                              placeholder="Type and frequency of oil used">{{ hair.hair_oil_details }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Products Used -->
+                        <div class="mb-4">
+                            <h6 class="fw-bold text-info mb-3">
+                                <i class="bi bi-basket me-2"></i>Current Products
+                            </h6>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="shampoo" class="form-label fw-semibold">Shampoo</label>
+                                    <input type="text" name="shampoo" id="shampoo" class="form-control"
+                                           placeholder="Shampoo brand/type" value="{{ hair.shampoo }}">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="conditioner" class="form-label fw-semibold">Conditioner</label>
+                                    <input type="text" name="conditioner" id="conditioner" class="form-control"
+                                           placeholder="Conditioner brand/type" value="{{ hair.conditioner }}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Hair Concerns -->
+                        <div class="mb-4">
+                            <h6 class="fw-bold text-warning mb-3">
+                                <i class="bi bi-exclamation-triangle me-2"></i>Hair Concerns
+                            </h6>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="form-check">
+                                        <input type="checkbox" name="hair_loss" id="hair_loss"
+                                               class="form-check-input"
+                                               {% if hair.hair_loss %}checked{% endif %}>
+                                        <label class="form-check-label" for="hair_loss">Hair Loss</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-check">
+                                        <input type="checkbox" name="dandruff" id="dandruff"
+                                               class="form-check-input"
+                                               {% if hair.dandruff %}checked{% endif %}>
+                                        <label class="form-check-label" for="dandruff">Dandruff</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="d-flex justify-content-between pt-3 border-top">
+                            <a href="{% url 'consultation_detail' consultation.id %}" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left me-2"></i>Back
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-circle me-2"></i>Save Hair Assessment
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border-radius: 15px;
+        transition: all 0.3s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1) !important;
+    }
+
+    .form-check-input:checked {
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+    }
+
+    .btn-primary {
+        border-radius: 10px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
+    }
+
+    .btn-outline-secondary {
+        border-radius: 10px;
+        font-weight: 600;
+    }
+</style>
+
+{% endblock %}

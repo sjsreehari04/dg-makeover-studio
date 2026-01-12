@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h4>Edit Manager</h4>
+
+<form method="post">
+  {% csrf_token %}
+
+  <div class="mb-3">
+    <label>Username</label>
+    <input class="form-control" value="{{ manager.username }}" disabled>
+  </div>
+
+  <div class="mb-3">
+    <label>Shop</label>
+    <select name="shop" class="form-control">
+      {% for shop in shops %}
+        <option value="{{ shop.id }}"
+          {% if manager.shop.id == shop.id %}selected{% endif %}>
+          {{ shop.name }}
+        </option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="form-check mb-3">
+    <input class="form-check-input" type="checkbox" name="is_active"
+      {% if manager.is_active %}checked{% endif %}>
+    <label class="form-check-label">Active</label>
+  </div>
+
+  <button class="btn btn-dark">Save Changes</button>
+</form>
+
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h4>Add Shop</h4>
+
+<form method="post">
+  {% csrf_token %}
+  <input name="name" class="form-control mb-3" placeholder="Shop name" required>
+  <button class="btn btn-dark">Save</button>
+</form>
+
+{% endblock %}

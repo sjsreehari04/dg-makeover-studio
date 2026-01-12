@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex align-items-center">
+                <div>
+                    <h2 class="mb-1">
+                        <i class="bi bi-file-earmark-text-fill text-warning me-3"></i>
+                        Pending Draft Consultations
+                    </h2>
+                    <p class="text-muted mb-0">Complete your unfinished consultations</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if drafts %}
+    <div class="row g-4">
+        {% for draft in drafts %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card border-0 shadow-sm draft-card h-100">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="avatar-circle bg-warning text-white me-3">
+                            <i class="bi bi-person-fill"></i>
+                        </div>
+                        <div>
+                            <h5 class="card-title mb-0">{{ draft.customer.name }}</h5>
+                            <small class="text-muted">{{ draft.customer.phone }}</small>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <label class="text-muted small mb-1">Visit Date</label>
+                                <p class="mb-0 fw-semibold">{{ draft.visit_date|date:"M d, Y" }}</p>
+                            </div>
+                            <div class="col-6">
+                                <label class="text-muted small mb-1">Created</label>
+                                <p class="mb-0 fw-semibold">{{ draft.created_at|date:"M d, Y" }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <span class="badge bg-warning text-dark px-3 py-2">
+                            <i class="bi bi-clock me-1"></i>{{ draft.get_status_display }}
+                        </span>
+                    </div>
+
+                    <a href="{% url 'consultation_detail' draft.id %}" class="btn btn-primary w-100">
+                        <i class="bi bi-arrow-right-circle me-2"></i>Complete Consultation
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="row">
+        <div class="col-lg-6 mx-auto">
+            <div class="card border-0 shadow-sm bg-light">
+                <div class="card-body text-center py-5">
+                    <div class="mb-4">
+                        <i class="bi bi-check-circle-fill text-success fs-1"></i>
+                    </div>
+                    <h4 class="text-muted mb-2">All Caught Up!</h4>
+                    <p class="text-muted mb-0">No pending draft consultations at the moment.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+    .draft-card {
+        border-radius: 15px;
+        transition: all 0.3s ease;
+    }
+
+    .draft-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15) !important;
+    }
+
+    .avatar-circle {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+    }
+
+    .badge {
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+
+    .btn-primary {
+        border-radius: 10px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
+    }
+</style>
+
+{% endblock %}

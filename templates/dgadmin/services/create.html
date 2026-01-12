@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h4>Add Service</h4>
+
+<form method="post">
+  {% csrf_token %}
+
+  <div class="mb-3">
+    <label>Service Name</label>
+    <input name="name" class="form-control" required>
+  </div>
+
+  <div class="mb-3">
+    <label>Category</label>
+    <select name="category" class="form-control" required>
+      <option value="">-- Select Category --</option>
+      <option value="HAIR">Hair</option>
+      <option value="SKIN">Skin</option>
+      <option value="OTHER">Other</option>
+    </select>
+  </div>
+
+  <div class="mb-3">
+    <label>Base Price</label>
+    <input name="price" type="number" step="0.01"
+           class="form-control" required>
+    <small class="text-muted">
+      Service prices may vary based on selected conditions.
+    </small>
+  </div>
+
+  <button class="btn btn-dark">Save Service</button>
+</form>
+
+{% endblock %}

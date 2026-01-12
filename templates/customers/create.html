@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h4>Add New Customer</h4>
+
+<form method="post" class="mt-3">
+    {% csrf_token %}
+
+    <div class="mb-3">
+        <label>Name</label>
+        <input type="text" name="name" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+        <label>Phone</label>
+        <input type="text" name="phone" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+        <label>Date of Birth</label>
+        <input type="date" name="dob" class="form-control">
+    </div>
+
+    <div class="mb-3">
+        <label>Address</label>
+        <textarea name="address" class="form-control"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label>Emergency Contact</label>
+        <input type="text" name="emergency_contact" class="form-control">
+    </div>
+
+    <button class="btn btn-dark">Save Customer</button>
+</form>
+
+{% endblock %}

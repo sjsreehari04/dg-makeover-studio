@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h4>Hair Condition</h4>
+
+<form method="post" action="{% url 'hair_condition' consultation.id %}" class="mt-3">
+  {% csrf_token %}
+
+  <label>Last Treatment</label>
+  <input class="form-control mb-2" name="last_treatment"
+         value="{{ hair.last_treatment }}">
+
+  <label>Henna / Black</label>
+  <select class="form-control mb-2" name="henna_or_black">
+    <option value="">-- Select --</option>
+    <option value="HENNA" {% if hair.henna_or_black == 'HENNA' %}selected{% endif %}>Henna</option>
+    <option value="BLACK" {% if hair.henna_or_black == 'BLACK' %}selected{% endif %}>Black</option>
+  </select>
+
+  <div class="form-check">
+    <input class="form-check-input" type="checkbox" name="home_remedies"
+           {% if hair.home_remedies %}checked{% endif %}>
+    <label class="form-check-label">Home Remedies</label>
+  </div>
+  <input class="form-control mb-2" name="home_remedy_details"
+         placeholder="Details" value="{{ hair.home_remedy_details }}">
+
+  <div class="form-check">
+    <input class="form-check-input" type="checkbox" name="hair_oil"
+           {% if hair.hair_oil %}checked{% endif %}>
+    <label class="form-check-label">Hair Oil</label>
+  </div>
+  <input class="form-control mb-2" name="hair_oil_details"
+         placeholder="Details" value="{{ hair.hair_oil_details }}">
+
+  <label>Shampoo</label>
+  <input class="form-control mb-2" name="shampoo" value="{{ hair.shampoo }}">
+
+  <label>Conditioner</label>
+  <input class="form-control mb-2" name="conditioner" value="{{ hair.conditioner }}">
+
+  <div class="form-check">
+    <input class="form-check-input" type="checkbox" name="hair_loss"
+           {% if hair.hair_loss %}checked{% endif %}>
+    <label class="form-check-label">Hair Loss</label>
+  </div>
+
+  <div class="form-check mb-3">
+    <input class="form-check-input" type="checkbox" name="dandruff"
+           {% if hair.dandruff %}checked{% endif %}>
+    <label class="form-check-label">Dandruff</label>
+  </div>
+
+  <button class="btn btn-dark">Save</button>
+  <a href="{% url 'consultation_detail' consultation.id %}" class="btn btn-outline-secondary ms-2">
+    Back
+  </a>
+</form>
+
+{% endblock %}

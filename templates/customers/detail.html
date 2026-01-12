@@ -1,0 +1,339 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container-fluid">
+    <!-- Customer Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm bg-gradient-info text-white">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <div class="customer-avatar-large bg-white text-info rounded-circle d-flex align-items-center justify-content-center me-4" style="width: 80px; height: 80px; font-weight: bold; font-size: 32px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+                                {{ customer.name|first|upper }}
+                            </div>
+                            <div>
+                                <h2 class="mb-1">{{ customer.name }}</h2>
+                                <p class="mb-0 opacity-75">
+                                    <i class="bi bi-telephone me-2"></i>{{ customer.phone }}
+                                    {% if customer.email %}
+                                    • <i class="bi bi-envelope me-2"></i>{{ customer.email }}
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                        {% if request.user.role == 'MANAGER' %}
+                        <a href="{% url 'consultation_create' customer.id %}" class="btn btn-light btn-lg">
+                            <i class="bi bi-plus-circle me-2"></i>Start New Consultation
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Customer Details Cards -->
+    <div class="row mb-4">
+        <!-- Personal Information -->
+        <div class="col-md-6 mb-3">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-header bg-light border-0">
+                    <h5 class="mb-0">
+                        <i class="bi bi-person-lines-fill text-info me-2"></i>
+                        Personal Information
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            <div class="info-item">
+                                <label class="text-muted small mb-1">Date of Birth</label>
+                                <div class="fw-bold">
+                                    {% if customer.dob %}
+                                    <i class="bi bi-calendar-event text-info me-2"></i>{{ customer.dob|date:"M d, Y" }}
+                                    {% else %}
+                                    <span class="text-muted">Not provided</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="info-item">
+                                <label class="text-muted small mb-1">Phone Number</label>
+                                <div class="fw-bold">
+                                    <i class="bi bi-telephone text-success me-2"></i>{{ customer.phone }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="info-item">
+                                <label class="text-muted small mb-1">Address</label>
+                                <div class="fw-bold">
+                                    {% if customer.address %}
+                                    <i class="bi bi-geo-alt text-warning me-2"></i>{{ customer.address }}
+                                    {% else %}
+                                    <span class="text-muted">Not provided</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% if customer.emergency_contact %}
+                        <div class="col-12">
+                            <div class="info-item">
+                                <label class="text-muted small mb-1">Emergency Contact</label>
+                                <div class="fw-bold">
+                                    <i class="bi bi-shield-exclamation text-danger me-2"></i>{{ customer.emergency_contact }}
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Visit Statistics -->
+        <div class="col-md-6 mb-3">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-header bg-light border-0">
+                    <h5 class="mb-0">
+                        <i class="bi bi-graph-up text-success me-2"></i>
+                        Visit Statistics
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3 text-center">
+                        <div class="col-6">
+                            <div class="stat-circle bg-primary bg-opacity-10 text-primary rounded-circle mx-auto mb-2" style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
+                                <span class="fw-bold fs-4">{{ consultations|length }}</span>
+                            </div>
+                            <div class="text-muted small">Total Visits</div>
+                        </div>
+                        <div class="col-6">
+                            <div class="stat-circle bg-success bg-opacity-10 text-success rounded-circle mx-auto mb-2" style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
+                                <span class="fw-bold fs-4">{{ consultations|length|add:"0" }}</span>
+                            </div>
+                            <div class="text-muted small">Completed</div>
+                        </div>
+                        <div class="col-12 mt-3">
+                            {% if consultations %}
+                            <div class="alert alert-info border-0">
+                                <i class="bi bi-calendar-check me-2"></i>
+                                Last visit: <strong>{{ consultations.0.visit_date|date:"M d, Y" }}</strong>
+                            </div>
+                            {% else %}
+                            <div class="alert alert-light border-0">
+                                <i class="bi bi-info-circle me-2"></i>
+                                No visits recorded yet
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Visit History -->
+    <div class="row">
+        <div class="col-12">
+            <h4 class="mb-4">
+                <i class="bi bi-clock-history text-secondary me-2"></i>
+                Visit History
+            </h4>
+
+            {% for consultation in consultations %}
+            <div class="card mb-3 border">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-3">
+                            <div class="visit-date">
+                                <h5 class="mb-1">{{ consultation.visit_date|date:"M d, Y" }}</h5>
+                                <small class="text-muted">{{ consultation.visit_date|date:"l" }}</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="visit-info">
+                                <div class="mb-1"><strong>Shop:</strong> {{ consultation.shop.name }}</div>
+                                <div><strong>By:</strong> {% if consultation.created_by %}{{ consultation.created_by.get_full_name|default:consultation.created_by.username }}{% else %}Unknown{% endif %}</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="visit-status">
+                                <span class="badge {% if consultation.status == 'COMPLETED' %}bg-success{% else %}bg-warning text-dark{% endif %} fs-6">
+                                    {{ consultation.get_status_display }}
+                                </span>
+                                {% if consultation.services.all %}
+                                <div class="mt-2">
+                                    <small class="text-muted">{{ consultation.services.count }} service{{ consultation.services.count|pluralize }}</small>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-3 text-end">
+                            <div class="visit-actions">
+                                {% if consultation.services.all %}
+                                <div class="total-amount mb-2">
+                                    <strong class="text-success">₹{{ consultation.calculate_subtotal }}</strong>
+                                </div>
+                                {% endif %}
+                                <a href="{% url 'consultation_detail' consultation.id %}" class="btn btn-outline-primary btn-sm">
+                                    <i class="bi bi-eye me-1"></i>View Details
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="card border">
+                <div class="card-body text-center py-4">
+                    <i class="bi bi-calendar-x fs-2 text-muted mb-3"></i>
+                    <h5 class="text-muted mb-2">No Visits Found</h5>
+                    <p class="text-muted mb-0">This customer hasn't had any consultations yet.</p>
+                    {% if request.user.role == 'MANAGER' %}
+                    <a href="{% url 'consultation_create' customer.id %}" class="btn btn-info mt-3">
+                        <i class="bi bi-plus-circle me-2"></i>Start First Consultation
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-gradient-info {
+        background: linear-gradient(135deg, #0dcaf0 0%, #6610f2 100%);
+    }
+
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #007bff 0%, #6610f2 100%);
+    }
+
+    .customer-avatar-large {
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .info-item {
+        padding: 0.75rem;
+        background: #f8f9fa;
+        border-radius: 8px;
+        border-left: 4px solid #0dcaf0;
+    }
+
+    .stat-circle {
+        border: 3px solid currentColor;
+    }
+
+    .condition-card {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        border-left: 4px solid #dee2e6;
+    }
+
+    .condition-title {
+        color: #495057;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .condition-details {
+        font-size: 0.875rem;
+    }
+
+    .services-list {
+        max-height: 120px;
+        overflow-y: auto;
+    }
+
+    .photo-container {
+        position: relative;
+        overflow: hidden;
+        border-radius: 8px;
+    }
+
+    .photo-container img {
+        width: 100%;
+        height: 120px;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .photo-container:hover img {
+        transform: scale(1.05);
+    }
+
+    .photo-label {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0,0,0,0.7);
+        padding: 0.25rem 0.5rem;
+        text-align: center;
+    }
+
+    .summary-card {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 1rem;
+        border-left: 4px solid #6c757d;
+    }
+
+    .summary-title {
+        color: #495057;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .badge {
+        font-size: 0.7rem;
+        padding: 0.25rem 0.5rem;
+    }
+
+    .card {
+        border-radius: 15px;
+        overflow: hidden;
+    }
+
+    .alert {
+        border-radius: 10px;
+    }
+
+    /* Visit History Styles */
+    .visit-date h5 {
+        color: #495057;
+        margin-bottom: 0.25rem;
+    }
+
+    .visit-info {
+        font-size: 0.9rem;
+    }
+
+    .visit-status .badge {
+        font-size: 0.75rem;
+        padding: 0.375rem 0.75rem;
+    }
+
+    .total-amount {
+        font-size: 1.1rem;
+    }
+
+    .visit-actions .btn {
+        font-size: 0.85rem;
+        padding: 0.375rem 0.75rem;
+    }
+</style>
+
+{% endblock %}
