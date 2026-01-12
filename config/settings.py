@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+load_dotenv()
 
 
 
@@ -162,11 +164,14 @@ DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
 
 # CLOUDINARY_URL = "cloudinary://924393986683881:93ZPrWbWYvo1_yvpNlfW2j7vDeU@dckcaafwo"
 
-CLOUDINARY_STORAGE = {
-    "CLOUD_NAME": "dckcaafwo",
-    "API_KEY": "924393986683881",
-    "API_SECRET": "93ZPrWbWYvo1_yvpNlfW2j7vDeU",
-}
+# CLOUDINARY_STORAGE = {
+#     "CLOUD_NAME": "dckcaafwo",
+#     "API_KEY": "924393986683881",
+#     "API_SECRET": "93ZPrWbWYvo1_yvpNlfW2j7vDeU",
+# }
+CLOUDINARY_URL = os.getenv("CLOUDINARY_URL")
+DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
+
 
 import cloudinary
 
