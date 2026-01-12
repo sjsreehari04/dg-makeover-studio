@@ -158,26 +158,12 @@ FILE_UPLOAD_PERMISSIONS = 0o644
 ALLOWED_IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'heic', 'heif']
 ALLOWED_VIDEO_EXTENSIONS = ['mp4', 'avi', 'mov', 'wmv', 'mkv']
 MAX_UPLOAD_SIZE = 10 * 1024 * 1024  # 10MB
-
+import os
 
 DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
 
-# CLOUDINARY_URL = "cloudinary://924393986683881:93ZPrWbWYvo1_yvpNlfW2j7vDeU@dckcaafwo"
-
-# CLOUDINARY_STORAGE = {
-#     "CLOUD_NAME": "dckcaafwo",
-#     "API_KEY": "924393986683881",
-#     "API_SECRET": "93ZPrWbWYvo1_yvpNlfW2j7vDeU",
-# }
-CLOUDINARY_URL = os.getenv("CLOUDINARY_URL")
-DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
-
-
-import cloudinary
-
-cloudinary.config(
-    cloud_name="dckcaafwo",
-    api_key="924393986683881",
-    api_secret="93ZPrWbWYvo1_yvpNlfW2j7vDeU",
-    secure=True
-)
+CLOUDINARY_STORAGE = {
+    "CLOUD_NAME": os.getenv("CLOUDINARY_CLOUD_NAME"),
+    "API_KEY": os.getenv("CLOUDINARY_API_KEY"),
+    "API_SECRET": os.getenv("CLOUDINARY_API_SECRET"),
+}
