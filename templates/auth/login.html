@@ -13,7 +13,7 @@
     <style>
         body {
             min-height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: white;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -29,17 +29,18 @@
         .login-card {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
-            border: none;
+            border: 3px solid #ff1493;
             border-radius: 20px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
             overflow: hidden;
         }
 
         .login-header {
-            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-            color: white;
+            background: white;
+            color: black;
             padding: 40px 30px 30px;
             text-align: center;
+            border-bottom: 1px solid #e5e7eb;
         }
 
         .login-header h1 {
@@ -76,12 +77,12 @@
         }
 
         .form-control:focus {
-            border-color: #4f46e5;
-            box-shadow: 0 0 0 0.2rem rgba(79, 70, 229, 0.25);
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
         }
 
         .btn-login {
-            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
             border: none;
             border-radius: 12px;
             padding: 14px 20px;
@@ -96,7 +97,7 @@
 
         .btn-login:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(79, 70, 229, 0.3);
+            box-shadow: 0 10px 25px rgba(0, 123, 255, 0.3);
             color: white;
         }
 
@@ -112,7 +113,7 @@
         }
 
         .login-footer i {
-            color: #4f46e5;
+            color: #007bff;
             margin-right: 8px;
         }
 
@@ -140,7 +141,7 @@
 <div class="login-container">
     <div class="login-card">
         <div class="login-header">
-            <h1>DG Makeover Studio</h1>
+            <img src="{% static 'images/DG_Logo.jpg' %}" alt="DG Makeover Studio Logo" height="120" class="mb-3 rounded shadow" style="border: 3px solid #ff1493; box-shadow: 0 0 15px rgba(255,20,147,0.5);">
         </div>
 
         <div class="login-body">
