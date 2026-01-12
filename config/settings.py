@@ -99,7 +99,11 @@ DATABASES = {
 }
 
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = [
+    "dg-makeover-studio.onrender.com",
+    "localhost",
+    "127.0.0.1",
+]
 
 
 # Password validation
