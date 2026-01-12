@@ -158,6 +158,10 @@ FILE_UPLOAD_PERMISSIONS = 0o644
 ALLOWED_IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'heic', 'heif']
 ALLOWED_VIDEO_EXTENSIONS = ['mp4', 'avi', 'mov', 'wmv', 'mkv']
 MAX_UPLOAD_SIZE = 10 * 1024 * 1024  # 10MB
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
 import os
 
 DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
