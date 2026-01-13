@@ -92,9 +92,17 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
+import dj_database_url
+import os
+
+import os
+import dj_database_url
+
 DATABASES = {
     "default": dj_database_url.config(
-        default=os.getenv("DATABASE_URL")
+        default=os.environ.get("postgresql://dg_makeover_db_user:YMDpCdkep1BGijAfbm4rBjkUWf6IKbqd@dpg-d5g8n9npm1nc73e1aht0-a/dg_makeover_db"),
+        conn_max_age=600,
+        ssl_require=True,
     )
 }
 
