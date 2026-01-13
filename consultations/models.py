@@ -201,7 +201,17 @@ class ConsultationMedia(models.Model):
         related_name='media'
     )
 
-    media_file = CloudinaryField('consultation_media')
+    media_file = CloudinaryField(
+    'consultation_media',
+    resource_type='image',
+    transformation=[
+        {
+            'fetch_format': 'jpg',
+            'quality': 'auto'
+        }
+    ]
+)
+
 
     
     media_type = models.CharField(
