@@ -94,13 +94,12 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 import dj_database_url
 import os
-
 import os
 import dj_database_url
 
 DATABASES = {
     "default": dj_database_url.config(
-        default=os.environ.get("postgresql://dg_makeover_db_user:YMDpCdkep1BGijAfbm4rBjkUWf6IKbqd@dpg-d5g8n9npm1nc73e1aht0-a/dg_makeover_db"),
+        default=os.environ.get("DATABASE_URL"),
         conn_max_age=600,
         ssl_require=True,
     )
