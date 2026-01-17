@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Customer
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.db.models import Q
+from django.db import IntegrityError
 
 
 @login_required
@@ -53,21 +55,20 @@ def customer_detail(request, customer_id):
 
 @login_required
 def customer_create(request):
-    if request.user.role != 'MANAGER':
-        return redirect('dg_admin_dashboard')
+    if request.method == "POST":
+        name = request.POST.get("name")
+        phone = request.POST.get("phone")
 
-    if request.method == 'POST':
-        customer = Customer.objects.create(
-            name=request.POST.get('name'),
-            phone=request.POST.get('phone'),
-            dob=request.POST.get('dob') or None,
-            address=request.POST.get('address'),
-            emergency_contact=request.POST.get('emergency_contact')
-        )
+        try:
+            Customer.objects.create(name=name, phone=phone)
+            messages.success(request, "Customer added successfully!")
+            return redirect("customer_list")
 
-        return redirect('customer_detail', customer_id=customer.id)
+        except IntegrityError:
+            messages.error(request, "This phone number already exists. Please select existing customer.")
+            return redirect("customer_create")
 
-    return render(request, 'customers/create.html')
+    return render(request, "customers/add.html")
 
 @login_required
 def customer_list(request):
