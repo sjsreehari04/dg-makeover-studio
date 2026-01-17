@@ -58,15 +58,32 @@ def customer_create(request):
     if request.method == "POST":
         name = request.POST.get("name")
         phone = request.POST.get("phone")
+        dob = request.POST.get("dob") or None
+        address = request.POST.get("address")
+        emergency_contact = request.POST.get("emergency_contact")
 
         try:
-            Customer.objects.create(name=name, phone=phone)
+            Customer.objects.create(
+                name=name,
+                phone=phone,
+                dob=dob,
+                address=address,
+                emergency_contact=emergency_contact
+            )
             messages.success(request, "Customer added successfully!")
             return redirect("customer_list")
 
         except IntegrityError:
             messages.error(request, "This phone number already exists. Please select existing customer.")
-            return redirect("customer_create")
+            # Keep form data on error
+            context = {
+                'name': name,
+                'phone': phone,
+                'dob': dob,
+                'address': address,
+                'emergency_contact': emergency_contact,
+            }
+            return render(request, "customers/add.html", context)
 
     return render(request, "customers/add.html")
 
