@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
+from django.db import models
 from decimal import Decimal
 from PIL import Image
 import os
@@ -214,6 +215,14 @@ def health_condition(request, consultation_id):
 def consultation_services(request, consultation_id):
     consultation = get_object_or_404(Consultation, id=consultation_id)
     services = Service.objects.filter(is_active=True)
+    
+    # Search functionality
+    search_query = request.GET.get('search', '').strip()
+    if search_query:
+        services = services.filter(
+            models.Q(name__icontains=search_query) | 
+            models.Q(category__icontains=search_query)
+        )
 
     if request.method == 'POST':
         service_ids = request.POST.getlist('services[]')
@@ -279,6 +288,7 @@ def consultation_services(request, consultation_id):
         'consultation': consultation,
         'services': services,
         'existing_services': existing_services,
+        'search_query': search_query,
         'existing_services_json': json.dumps([
             {'service_id': es.service.id, 'rate': float(es.rate)} 
             for es in existing_services

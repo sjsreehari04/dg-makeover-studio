@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from .models import Bill
 from consultations.models import Consultation
 
@@ -13,9 +14,19 @@ def bill_list(request):
         bills = Bill.objects.filter(
             consultation__shop=request.user.shop
         ).order_by('-created_at')
+    
+    # Search functionality
+    search_query = request.GET.get('search', '').strip()
+    if search_query:
+        bills = bills.filter(
+            Q(invoice_number__icontains=search_query) |
+            Q(consultation__customer__name__icontains=search_query) |
+            Q(consultation__services__service_name__icontains=search_query)
+        ).distinct()
 
     return render(request, 'billing/list.html', {
-        'bills': bills
+        'bills': bills,
+        'search_query': search_query
     })
 
 @login_required

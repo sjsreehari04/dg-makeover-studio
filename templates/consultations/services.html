@@ -65,10 +65,35 @@
             <div class="col-lg-8">
                 <div class="card border-0 shadow-sm h-100">
                     <div class="card-header bg-warning text-dark py-3">
-                        <h5 class="mb-0">
-                            <i class="bi bi-grid me-2"></i>
-                            Available Services
-                        </h5>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="mb-0">
+                                <i class="bi bi-grid me-2"></i>
+                                Available Services
+                            </h5>
+                        </div>
+                        <!-- Search Services -->
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text bg-white">
+                                <i class="bi bi-search"></i>
+                            </span>
+                            <input 
+                                type="text" 
+                                id="serviceSearch" 
+                                class="form-control" 
+                                placeholder="Search services by name or category..."
+                            >
+                            {% if search_query %}
+                            <a href="{% url 'consultation_services' consultation.id %}" class="btn btn-sm btn-outline-warning">
+                                <i class="bi bi-x-circle"></i>
+                            </a>
+                            {% endif %}
+                        </div>
+                        {% if search_query %}
+                        <small class="text-muted d-block mt-2">
+                            Filtered by: <strong>{{ search_query }}</strong>
+                            <a href="{% url 'consultation_services' consultation.id %}" class="ms-2">Show all</a>
+                        </small>
+                        {% endif %}
                     </div>
                     <div class="card-body p-4">
                         {% if services %}
@@ -526,6 +551,47 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     if (existingServicesData.length > 0) {
         updateSummary(); // Update after pre-selection
+    }
+
+    // Client-side search functionality
+    const serviceSearch = document.getElementById('serviceSearch');
+    if (serviceSearch) {
+        serviceSearch.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const serviceItems = document.querySelectorAll('.service-item');
+            let visibleCount = 0;
+
+            serviceItems.forEach(item => {
+                const serviceName = item.querySelector('.form-check-label').textContent.toLowerCase();
+                const matches = serviceName.includes(searchTerm);
+                
+                if (matches || searchTerm === '') {
+                    item.style.display = '';
+                    visibleCount++;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            // Show "no results" message if needed
+            const servicesGrid = document.querySelector('.services-grid');
+            let noResultsMsg = servicesGrid.querySelector('.no-results-message');
+            
+            if (visibleCount === 0 && searchTerm !== '') {
+                if (!noResultsMsg) {
+                    noResultsMsg = document.createElement('div');
+                    noResultsMsg.className = 'no-results-message text-center py-5 text-muted';
+                    noResultsMsg.innerHTML = `
+                        <i class="bi bi-search fs-1 mb-3 d-block"></i>
+                        <h5>No services found</h5>
+                        <p>No services match "<strong>${searchTerm}</strong>"</p>
+                    `;
+                    servicesGrid.appendChild(noResultsMsg);
+                }
+            } else if (noResultsMsg) {
+                noResultsMsg.remove();
+            }
+        });
     }
 });
 </script>
